@@ -1,0 +1,7 @@
+{
+  "name": "stone-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Vinicius <vinicius.barcosg@gmail.com>",
+  "license": "MIT"
+}
