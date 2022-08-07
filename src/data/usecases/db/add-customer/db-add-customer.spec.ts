@@ -1,7 +1,5 @@
-import { CreateCustomerModel } from '../../../domain/usecases/add-customer'
-import { CustomerModel } from '../../../domain/models/customer'
+import { CreateCustomerModel, CustomerModel, AddCustomerRepository } from './db-add-customer-protocols'
 import { DbAddCustomer } from './db-add-customer'
-import { AddCustomerRepository } from '../../protocols/db/add-customer-repository'
 
 const makeAddCustomerRepositoryStub = (): AddCustomerRepository => {
   class AddCustomerRepositoryStub implements AddCustomerRepository {

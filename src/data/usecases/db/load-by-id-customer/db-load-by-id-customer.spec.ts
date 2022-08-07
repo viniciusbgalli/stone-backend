@@ -1,6 +1,6 @@
-import { CustomerModel } from '../../../domain/models/customer'
+
+import { CustomerModel, LoadCustomerByIdRepository } from './db-load-by-id-customer-protocols'
 import { DbLoadByIdCustomer } from './db-load-by-id-customer'
-import { LoadCustomerByIdRepository } from '../../protocols/db/load-by-id-customer-repository'
 
 const makeLoadCustomerByIdRepositoryStub = (): LoadCustomerByIdRepository => {
   class LoadCustomerByIdRepositoryStub implements LoadCustomerByIdRepository {

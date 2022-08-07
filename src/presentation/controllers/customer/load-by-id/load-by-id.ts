@@ -1,8 +1,4 @@
-import { ok, notFound, serverError } from '../../../presentation/helpers/http-helper'
-import { InvalidParamError } from '../../../presentation/errors/invalid-param-error'
-import { HttpRequest, HttpResponse } from '../../protocols/http'
-import { Controller } from '../../protocols/controllers'
-import { LoadCustomer } from '../../../domain/usecases/load-customer-by-id'
+import { ok, notFound, serverError, InvalidParamError, HttpRequest, HttpResponse, Controller, LoadCustomer } from './load-by-id-protocols'
 
 export class LoadCustomerByIdController implements Controller {
   constructor (private readonly loadCustomer: LoadCustomer) {}

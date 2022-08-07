@@ -1,6 +1,5 @@
-import { LoadCustomer } from '../../../domain/usecases/load-customer-by-id'
-import { CustomerModel } from '../../../domain/models/customer'
-import { LoadCustomerByIdRepository } from '../../../data/protocols/db/load-by-id-customer-repository'
+
+import { LoadCustomer, CustomerModel, LoadCustomerByIdRepository } from './db-load-by-id-customer-protocols'
 
 export class DbLoadByIdCustomer implements LoadCustomer {
   constructor (private readonly loadCustumerByIdRepository: LoadCustomerByIdRepository) {}

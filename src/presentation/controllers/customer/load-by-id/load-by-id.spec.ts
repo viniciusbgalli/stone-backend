@@ -1,9 +1,5 @@
-import { LoadCustomer } from '../../../domain/usecases/load-customer-by-id'
-import { InvalidParamError } from '../../../presentation/errors/invalid-param-error'
-import { ServerError } from '../../../presentation/errors/server-error'
-import { ok } from '../../../presentation/helpers/http-helper'
-import { CustomerModel } from '../../../domain/models/customer'
-import { LoadCustomerByIdController } from './loadById'
+import { InvalidParamError, LoadCustomer, CustomerModel } from './load-by-id-protocols'
+import { LoadCustomerByIdController } from './load-by-id'
 
 const makeLoadByIdCustomerStub = (): LoadCustomer => {
   class LoadByIdCustomerStub implements LoadCustomer {
@@ -58,11 +54,12 @@ describe('Load Customer by Id Controller', () => {
   test('Should load a customer on success', async () => {
     const { sut } = makeSut()
     const response = await sut.handle(expectedHttpRequest)
-    expect(response).toEqual(ok({
+    expect(response.statusCode).toBe(200)
+    expect(response.body).toEqual({
       id: 'customer-id',
       document: 12345,
       name: 'customer-name'
-    }))
+    })
   })
 
   test('Should return serverError if addCustomer throws', async () => {
@@ -73,6 +70,5 @@ describe('Load Customer by Id Controller', () => {
 
     const response = await sut.handle(expectedHttpRequest)
     expect(response.statusCode).toBe(500)
-    expect(response.body).toEqual(new ServerError())
   })
 })

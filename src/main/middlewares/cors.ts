@@ -1,3 +1,3 @@
 import cors from 'cors'
 
-export const corsMiddleware = cors()
+export const CorsMiddleware = cors()

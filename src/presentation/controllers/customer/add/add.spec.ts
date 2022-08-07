@@ -1,8 +1,4 @@
-import { AddCustomer, CreateCustomerModel } from '../../../domain/usecases/add-customer'
-import { MissingParamError } from '../../../presentation/errors/missing-param-error'
-import { ServerError } from '../../../presentation/errors/server-error'
-import { created } from '../../../presentation/helpers/http-helper'
-import { CustomerModel } from '../../../domain/models/customer'
+import { MissingParamError, AddCustomer, CreateCustomerModel, CustomerModel } from './add-protocols'
 import { AddCustomerController } from './add'
 
 const makeAddCustomerStub = (): AddCustomer => {
@@ -78,11 +74,12 @@ describe('Add Customer Controller', () => {
   test('Should create customer on success', async () => {
     const { sut } = makeSut()
     const response = await sut.handle(expectedHttpRequest)
-    expect(response).toEqual(created({
+    expect(response.statusCode).toBe(201)
+    expect(response.body).toEqual({
       id: 'customer-id',
       document: 12345,
       name: 'customer-name'
-    }))
+    })
   })
 
   test('Should return serverError if addCustomer throws', async () => {
@@ -93,6 +90,5 @@ describe('Add Customer Controller', () => {
 
     const response = await sut.handle(expectedHttpRequest)
     expect(response.statusCode).toBe(500)
-    expect(response.body).toEqual(new ServerError())
   })
 })

@@ -1,7 +1,7 @@
 import { AuthorizationError } from '../../presentation/errors/authorization-error'
 import { Request, Response, NextFunction } from 'express'
 
-export const defaultContentTypeMiddleware = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
+export const UserRoleAuthenticationMiddleware = async (req: Request, res: Response, next: NextFunction): Promise<void | Response> => {
   try {
     const requiredRoles: string[] = ['user']
     if (!req.user.token || !req.user.clientId) {

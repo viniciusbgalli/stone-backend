@@ -1,8 +1,5 @@
-import { AddCustomerController } from '../../presentation/controllers/customer/add'
-import { LoadCustomerByIdController } from '../../presentation/controllers/customer/loadById'
-import { DbAddCustomer } from '../../data/usecases/add-customer/db-add-customer'
-import { DbLoadByIdCustomer } from '../../data/usecases/load-by-id-customer/db-load-by-id-customer'
-import { RedisCustomerRepository } from '../../infra/db/redis/customer-repository/customer'
+
+import { RedisCustomerRepository, DbLoadByIdCustomer, DbAddCustomer, AddCustomerController, LoadCustomerByIdController } from './customer-import-files'
 
 export const makeAddCustomerController = (): AddCustomerController => {
   const redisCustomerRepository = new RedisCustomerRepository()

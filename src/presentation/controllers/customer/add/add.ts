@@ -1,8 +1,5 @@
-import { MissingParamError } from '../../../presentation/errors/missing-param-error'
-import { badRequest, created, serverError } from '../../../presentation/helpers/http-helper'
-import { HttpRequest, HttpResponse } from '../../protocols/http'
-import { Controller } from '../../protocols/controllers'
-import { AddCustomer } from '../../../domain/usecases/add-customer'
+
+import { badRequest, created, serverError, MissingParamError, Controller, HttpRequest, HttpResponse, AddCustomer } from './add-protocols'
 
 export class AddCustomerController implements Controller {
   constructor (private readonly addCustomer: AddCustomer) {}
