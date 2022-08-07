@@ -1,4 +1,4 @@
-import { InvalidParamError, LoadCustomer, CustomerModel } from './load-by-id-protocols'
+import { InvalidParamError, LoadCustomer, CustomerModel, CustomerNotFound } from './load-by-id-protocols'
 import { LoadCustomerByIdController } from './load-by-id'
 
 const makeLoadByIdCustomerStub = (): LoadCustomer => {
@@ -45,7 +45,7 @@ describe('Load Customer By Id Controller', () => {
 
   test('Should return 404 if no customer found', async () => {
     const { sut, loadByIdCustomerStub } = makeSut()
-    jest.spyOn(loadByIdCustomerStub, 'loadById').mockReturnValueOnce(new Promise(resolve => resolve(null)))
+    jest.spyOn(loadByIdCustomerStub, 'loadById').mockReturnValueOnce(new Promise((resolve, reject) => reject(new CustomerNotFound())))
     const response = await sut.handle(expectedHttpRequest)
     expect(response.statusCode).toBe(404)
     expect(response.body).toEqual(new InvalidParamError('id').message)
@@ -62,13 +62,13 @@ describe('Load Customer By Id Controller', () => {
     })
   })
 
-  test('Should return serverError if addCustomer throws', async () => {
+  test('Should return cacheError if db throws', async () => {
     const { sut, loadByIdCustomerStub } = makeSut()
     jest.spyOn(loadByIdCustomerStub, 'loadById').mockImplementationOnce(() => {
       throw new Error()
     })
 
     const response = await sut.handle(expectedHttpRequest)
-    expect(response.statusCode).toBe(500)
+    expect(response.statusCode).toBe(502)
   })
 })

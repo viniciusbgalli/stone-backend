@@ -1,5 +1,7 @@
 export * from '../../../infra/db/redis/customer-repository/customer'
 export * from '../../../data/usecases/db/add-customer/db-add-customer'
 export * from '../../../data/usecases/db/load-by-id-customer/db-load-by-id-customer'
+export * from '../../../data/usecases/db/update-customer/db-update-customer'
 export * from '../../../presentation/controllers/customer/add/add'
 export * from '../../../presentation/controllers/customer/load-by-id/load-by-id'
+export * from '../../../presentation/controllers/customer/update/update-customer'

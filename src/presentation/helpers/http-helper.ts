@@ -1,5 +1,4 @@
-import { ServerError } from '../errors/server-error'
-import { AuthenticationError } from '../errors/authentication-error'
+import { ServerError, AuthenticationError, CacheError } from '../errors'
 import { HttpResponse } from '../protocols/http'
 
 export const badRequest = (error: Error): HttpResponse => ({
@@ -30,4 +29,9 @@ export const created = (data: any): HttpResponse => ({
 export const serverError = (): HttpResponse => ({
   statusCode: 500,
   body: new ServerError()
+})
+
+export const cacheError = (): HttpResponse => ({
+  statusCode: 502,
+  body: new CacheError()
 })

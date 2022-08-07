@@ -1,4 +1,4 @@
-import { ok, notFound, serverError, InvalidParamError, HttpRequest, HttpResponse, Controller, LoadCustomer } from './load-by-id-protocols'
+import { ok, notFound, cacheError, InvalidParamError, HttpRequest, HttpResponse, Controller, LoadCustomer, CustomerNotFound } from './load-by-id-protocols'
 
 export class LoadCustomerByIdController implements Controller {
   constructor (private readonly loadCustomer: LoadCustomer) {}
@@ -6,12 +6,12 @@ export class LoadCustomerByIdController implements Controller {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const customer = await this.loadCustomer.loadById(httpRequest.params.id)
-      if (!customer) {
-        return notFound(new InvalidParamError('id'))
-      }
       return ok(customer)
     } catch (error) {
-      return serverError()
+      if (error instanceof CustomerNotFound) {
+        return notFound(new InvalidParamError('id'))
+      }
+      return cacheError()
     }
   }
 }

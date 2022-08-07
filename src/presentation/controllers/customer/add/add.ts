@@ -1,5 +1,5 @@
 
-import { badRequest, created, serverError, MissingParamError, Controller, HttpRequest, HttpResponse, AddCustomer } from './add-protocols'
+import { badRequest, created, MissingParamError, Controller, HttpRequest, HttpResponse, AddCustomer, cacheError } from './add-protocols'
 
 export class AddCustomerController implements Controller {
   constructor (private readonly addCustomer: AddCustomer) {}
@@ -16,7 +16,7 @@ export class AddCustomerController implements Controller {
       const customer = await this.addCustomer.add({ document, name })
       return created(customer)
     } catch (error) {
-      return serverError()
+      return cacheError()
     }
   }
 }

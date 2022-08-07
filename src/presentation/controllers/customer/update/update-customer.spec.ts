@@ -1,5 +1,5 @@
-import { MissingParamError, CustomerModel, UpdateCustomer, UpdateCustomerModel } from './update-customer-protocols'
-import { LoadCustomerByIdController } from './update-customer'
+import { MissingParamError, CustomerModel, UpdateCustomer, UpdateCustomerModel, CacheError, CustomerNotFound } from './update-customer-protocols'
+import { UpdateCostumerController } from './update-customer'
 
 const makeUpdateCostumer = (): UpdateCustomer => {
   class UpdateCustomerStub implements UpdateCustomer {
@@ -16,13 +16,13 @@ const makeUpdateCostumer = (): UpdateCustomer => {
 }
 
 interface SutTypes{
-  sut: LoadCustomerByIdController
+  sut: UpdateCostumerController
   updateCustomerStub: UpdateCustomer
 }
 
 const makeSut = (): SutTypes => {
   const updateCustomerStub = makeUpdateCostumer()
-  const sut = new LoadCustomerByIdController(updateCustomerStub)
+  const sut = new UpdateCostumerController(updateCustomerStub)
   return {
     sut,
     updateCustomerStub
@@ -108,13 +108,19 @@ describe('Update Customer Controller', () => {
     })
   })
 
-  test('Should return serverError if updateCustomer throws', async () => {
+  test('Should return 404 if no customer found', async () => {
     const { sut, updateCustomerStub } = makeSut()
-    jest.spyOn(updateCustomerStub, 'update').mockImplementationOnce(() => {
-      throw new Error()
-    })
+    jest.spyOn(updateCustomerStub, 'update').mockReturnValueOnce(new Promise((resolve, reject) => reject(new CustomerNotFound())))
 
     const response = await sut.handle(expectedHttpRequest)
-    expect(response.statusCode).toBe(500)
+    expect(response.statusCode).toBe(404)
+  })
+
+  test('Should return cacheError if db throws', async () => {
+    const { sut, updateCustomerStub } = makeSut()
+    jest.spyOn(updateCustomerStub, 'update').mockReturnValueOnce(new Promise((resolve, reject) => reject(new CacheError())))
+
+    const response = await sut.handle(expectedHttpRequest)
+    expect(response.statusCode).toBe(502)
   })
 })

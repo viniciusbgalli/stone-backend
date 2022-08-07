@@ -82,13 +82,13 @@ describe('Add Customer Controller', () => {
     })
   })
 
-  test('Should return serverError if addCustomer throws', async () => {
+  test('Should return cacheError if addCustomer throws', async () => {
     const { sut, addCustomerStub } = makeSut()
     jest.spyOn(addCustomerStub, 'add').mockImplementationOnce(() => {
       throw new Error()
     })
 
     const response = await sut.handle(expectedHttpRequest)
-    expect(response.statusCode).toBe(500)
+    expect(response.statusCode).toBe(502)
   })
 })

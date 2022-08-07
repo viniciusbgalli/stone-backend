@@ -1,6 +1,6 @@
-import { badRequest, ok, serverError, HttpRequest, HttpResponse, Controller, UpdateCustomer, MissingParamError } from './update-customer-protocols'
+import { badRequest, ok, cacheError, HttpRequest, HttpResponse, Controller, UpdateCustomer, MissingParamError, CustomerNotFound, notFound, InvalidParamError } from './update-customer-protocols'
 
-export class LoadCustomerByIdController implements Controller {
+export class UpdateCostumerController implements Controller {
   constructor (private readonly updateCustomer: UpdateCustomer) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -22,7 +22,10 @@ export class LoadCustomerByIdController implements Controller {
       const customer = await this.updateCustomer.update({ id, document, name })
       return ok(customer)
     } catch (error) {
-      return serverError()
+      if (error instanceof CustomerNotFound) {
+        return notFound(new InvalidParamError('customer id'))
+      }
+      return cacheError()
     }
   }
 }
