@@ -1,14 +1,20 @@
 import { ServerError } from '../errors/server-error'
+import { AuthenticationError } from '../errors/authentication-error'
 import { HttpResponse } from '../protocols/http'
 
 export const badRequest = (error: Error): HttpResponse => ({
   statusCode: 400,
-  body: error
+  body: error.message
+})
+
+export const AuthenticationFailed = (): HttpResponse => ({
+  statusCode: 401,
+  body: new AuthenticationError()
 })
 
 export const notFound = (error: Error): HttpResponse => ({
   statusCode: 404,
-  body: error
+  body: error.message
 })
 
 export const ok = (data: any): HttpResponse => ({
