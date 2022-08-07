@@ -9,7 +9,6 @@ export class AddCustomerController implements Controller {
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      console.log(httpRequest)
       const requiredFields = ['document', 'name']
       for (const field of requiredFields) {
         if (!httpRequest.body[field]) {
