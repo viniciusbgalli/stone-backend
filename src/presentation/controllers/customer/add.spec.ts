@@ -50,7 +50,7 @@ describe('Add Customer Controller', () => {
     }
     const response = await sut.handle(httpRequest)
     expect(response.statusCode).toBe(400)
-    expect(response.body).toEqual(new MissingParamError('document'))
+    expect(response.body).toEqual(new MissingParamError('document').message)
   })
 
   test('Should return 400 if no name is provided', async () => {
@@ -62,7 +62,7 @@ describe('Add Customer Controller', () => {
     }
     const response = await sut.handle(httpRequest)
     expect(response.statusCode).toBe(400)
-    expect(response.body).toEqual(new MissingParamError('name'))
+    expect(response.body).toEqual(new MissingParamError('name').message)
   })
 
   test('Should call addCustomer with correct values', async () => {

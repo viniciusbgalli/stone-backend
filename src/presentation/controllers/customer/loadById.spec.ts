@@ -52,7 +52,7 @@ describe('Load Customer by Id Controller', () => {
     jest.spyOn(loadByIdCustomerStub, 'loadById').mockReturnValueOnce(new Promise(resolve => resolve(null)))
     const response = await sut.handle(expectedHttpRequest)
     expect(response.statusCode).toBe(404)
-    expect(response.body).toEqual(new InvalidParamError('id'))
+    expect(response.body).toEqual(new InvalidParamError('id').message)
   })
 
   test('Should load a customer on success', async () => {
