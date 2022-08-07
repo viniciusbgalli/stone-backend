@@ -1,5 +1,5 @@
-import { Client } from '../models/Client'
+import { CustomerModel } from '../models/customer'
 
-export interface LoadClient {
-  loadById: (id: string) => Promise<Client>
+export interface LoadCustomer {
+  loadById: (id: string) => Promise<CustomerModel>
 }
