@@ -35,7 +35,7 @@ const expectedHttpRequest = {
   }
 }
 
-describe('Load Customer by Id Controller', () => {
+describe('Load Customer By Id Controller', () => {
   test('Should call LoadCustomerById with correct value', async () => {
     const { sut, loadByIdCustomerStub } = makeSut()
     const loadByIdSpy = jest.spyOn(loadByIdCustomerStub, 'loadById')
