@@ -14,7 +14,7 @@ services:
   api:
     depends_on:
       - db
-    build: .
+    image: viniciusgalli/stone-api:v1
     ports:
       - 3001:3001
     networks:
