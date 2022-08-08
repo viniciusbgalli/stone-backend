@@ -1,8 +1,8 @@
-import { SignInMiddleware, UserRoleAuthenticationMiddleware, RouteAdpter, makeAddCustomerController, makeLoadCustomerByIdController, makeUpdateCostumerController } from './customer-routes-import-files'
+import { AuthenticationMiddleware, NormalUserRoleMiddleware, RouteAdpter, makeAddCustomerController, makeLoadCustomerByIdController, makeUpdateCostumerController } from './customer-routes-import-files'
 import { Router } from 'express'
 
 export default (router: Router): void => {
-  router.post('/customers', SignInMiddleware, UserRoleAuthenticationMiddleware, RouteAdpter(makeAddCustomerController()))
-  router.get('/customers/:id', SignInMiddleware, UserRoleAuthenticationMiddleware, RouteAdpter(makeLoadCustomerByIdController()))
-  router.put('/customers/:id', SignInMiddleware, UserRoleAuthenticationMiddleware, RouteAdpter(makeUpdateCostumerController()))
+  router.post('/customers', AuthenticationMiddleware, NormalUserRoleMiddleware, RouteAdpter(makeAddCustomerController()))
+  router.get('/customers/:id', AuthenticationMiddleware, NormalUserRoleMiddleware, RouteAdpter(makeLoadCustomerByIdController()))
+  router.put('/customers/:id', AuthenticationMiddleware, NormalUserRoleMiddleware, RouteAdpter(makeUpdateCostumerController()))
 }

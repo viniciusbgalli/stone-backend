@@ -42,7 +42,6 @@ export class RedisCustomerRepository implements AddCustomerRepository, LoadCusto
     }
 
     const updatedResponse = await RedisHelper.client.set(`customer:${id}`, JSON.stringify(updatedCustomer))
-    console.log(updatedResponse)
 
     if (!updatedResponse) {
       throw new CacheError()
