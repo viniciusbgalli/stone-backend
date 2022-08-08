@@ -21,7 +21,16 @@ services:
       - api-network
     environment:
       REDIS_HOST: db
-      CLIENT_SECRET: 453000f7-47a0-4489-bc47-891c742650e2      
+      REDIS_PORT: 6379
+      PORT: 3001
+      CLIENT_SECRET: 453000f7-47a0-4489-bc47-891c742650e2  
+      URL: https://accounts.seguros.vitta.com.br/auth/realms/careers/protocol/openid-connect/token
+      GRANT_TYPE: client_credentials
+      CLIENT_ID: customers
+      CLIENT_SECRET: 453000f7-47a0-4489-bc47-891c742650e2
+      USERNAME: vinicius.barcosg@gmail.com
+      PASSWORD: dmluaWNpdXMuYmFyY29zZ0BnbWFpbC5jb20=
+      SCOPE: openid    
 
 
 

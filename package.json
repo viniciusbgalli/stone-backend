@@ -22,7 +22,8 @@
     "typescript": "^4.7.4"
   },
   "scripts": {
-    "start":"node dist/main/server.js",
+    "dev:test": "yarn tsc && docker-compose up -d",
+    "start": "node dist/main/server.js",
     "build": "tsc",
     "test": "jest",
     "dev:server": "sucrase-node src/main/server.ts"
