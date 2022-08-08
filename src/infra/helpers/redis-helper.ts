@@ -1,3 +1,4 @@
+import { env } from '../../main/env'
 import Redis from 'ioredis'
 import { Express } from 'express'
 
@@ -5,7 +6,7 @@ export const RedisHelper = {
   client: null as Redis,
 
   async connect (uri: string, app: Express): Promise<void> {
-    this.client = new Redis(6379, uri)
+    this.client = new Redis(env.REDIS_PORT, env.REDIS_HOST)
 
     this.client.on(
       'connect', () => {
@@ -14,7 +15,7 @@ export const RedisHelper = {
 
     this.client.on('ready', () => {
       console.log('Redis ready to operate')
-      app.listen(3333, () => { console.log('server listening') })
+      app.listen(env.PORT, () => { console.log(`server listening on port ${env.PORT}`) })
     })
 
     this.client.on('error', function (e) {
