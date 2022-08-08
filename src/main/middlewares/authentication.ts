@@ -1,4 +1,5 @@
 import { AuthenticationError } from '../../presentation/errors'
+import { ssoProps } from '../env'
 import { Request, Response, NextFunction } from 'express'
 import { decode } from 'jsonwebtoken'
 import axios from 'axios'
@@ -61,12 +62,11 @@ const verifyIfTokenIsExpired = (exp: number): boolean => {
 }
 
 const verifyIfTokenIsGeneratedBySSO = async (subObtainedByToken: string): Promise<boolean> => {
-  const info = { grant_type: 'client_credentials', client_id: 'customers', client_secret: '453000f7-47a0-4489-bc47-891c742650e2', username: 'vinicius.barcosg@gmail.com', password: 'dmluaWNpdXMuYmFyY29zZ0BnbWFpbC5jb20=', scope: 'openid' }
   const options = {
     method: 'POST',
     headers: { 'content-type': 'application/x-www-form-urlencoded' },
-    data: qs.stringify(info),
-    url: 'https://accounts.seguros.vitta.com.br/auth/realms/careers/protocol/openid-connect/token'
+    data: qs.stringify(ssoProps),
+    url: ssoProps.url
   }
   const { data: { access_token: token } } = await axios(options) as SignInResponse
   const { sub } = decode(token) as GetSSOSub
