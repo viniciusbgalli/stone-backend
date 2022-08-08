@@ -3,6 +3,7 @@ import Redis from 'ioredis'
 import { Express } from 'express'
 
 export const RedisHelper = {
+  // @ts-expect-error
   client: null as Redis,
 
   async connect (uri: string, app: Express): Promise<void> {

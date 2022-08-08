@@ -12,10 +12,8 @@ export const NormalUserRoleMiddleware = async (req: Request, res: Response, next
       }
     }
     next()
-  } catch (error) {
-    console.log(error)
-    if (error instanceof AuthenticationError) { return res.status(403).json({ message: 'Not authorized' }) } else {
-      return res.status(502).json({ message: 'SSO unavailable' })
-    }
+  } catch (err) {
+    if (err instanceof AuthenticationError) { return res.status(403).json({ message: err.message }) }
+    return res.status(500).json({ message: 'Internal server error' })
   }
 }

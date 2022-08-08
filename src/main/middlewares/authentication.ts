@@ -1,4 +1,4 @@
-import { AuthenticationError } from '../../presentation/errors'
+import { AuthenticationError, SSOError } from '../../presentation/errors'
 import { ssoProps } from '../env'
 import { Request, Response, NextFunction } from 'express'
 import { decode } from 'jsonwebtoken'
@@ -29,28 +29,40 @@ export const AuthenticationMiddleware = async (req: Request, res: Response, next
       throw new AuthenticationError()
     }
     const [, token] = authHeader.split(' ')
-    const { exp, clientId, sub, resource_access: { customers: { roles } } } = decode(token) as DecodeFormat
-    const isExpired = verifyIfTokenIsExpired(exp)
+    const decodedToken = decodeToken(token)
+    const isExpired = verifyIfTokenIsExpired(decodedToken.exp)
     if (isExpired) {
       throw new AuthenticationError()
     }
-    const isGeneratedBySSO = await verifyIfTokenIsGeneratedBySSO(sub)
+    const isGeneratedBySSO = await verifyIfTokenIsGeneratedBySSO(decodedToken.sub)
     if (!isGeneratedBySSO) {
       throw new AuthenticationError()
     }
     req.user = {
-      clientId,
-      role: [...roles],
+      clientId: decodedToken.clientId,
+      role: decodedToken.resource_access.customers.roles,
       token
     }
     return next()
-  } catch (error) {
-    console.log(error)
-    if (error instanceof AuthenticationError) {
-      return res.status(401).json({ message: 'Invalid JWT token' })
-    } else {
-      return res.status(502).json({ message: 'SSO unavailable' })
+  } catch (err) {
+    if (err instanceof AuthenticationError) {
+      return res.status(401).json({ message: err.message })
     }
+    if (err instanceof SSOError) {
+      return res.status(502).json({ message: err.message })
+    }
+    return res.status(500).json({ message: 'Internal server error' })
+  }
+}
+
+const decodeToken = (token: string): DecodeFormat => {
+  try {
+    const { exp, clientId, sub, resource_access: { customers: { roles } } } = decode(token) as DecodeFormat
+    return {
+      exp, clientId, sub, resource_access: { customers: { roles } }
+    }
+  } catch (err) {
+    throw new AuthenticationError()
   }
 }
 
@@ -62,16 +74,20 @@ const verifyIfTokenIsExpired = (exp: number): boolean => {
 }
 
 const verifyIfTokenIsGeneratedBySSO = async (subObtainedByToken: string): Promise<boolean> => {
-  const options = {
-    method: 'POST',
-    headers: { 'content-type': 'application/x-www-form-urlencoded' },
-    data: qs.stringify(ssoProps),
-    url: ssoProps.url
+  try {
+    const options = {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      data: qs.stringify(ssoProps),
+      url: ssoProps.url
+    }
+    const { data: { access_token: token } } = await axios(options) as SignInResponse
+    const { sub } = decode(token) as GetSSOSub
+    if (sub === subObtainedByToken) {
+      return true
+    }
+    return false
+  } catch (err) {
+    throw new SSOError()
   }
-  const { data: { access_token: token } } = await axios(options) as SignInResponse
-  const { sub } = decode(token) as GetSSOSub
-  if (sub === subObtainedByToken) {
-    return true
-  }
-  return false
 }
